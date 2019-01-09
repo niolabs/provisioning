@@ -113,7 +113,6 @@ if [ ! -x "$(command -v salt-minion)" ]; then
 	pip install salt || echofatal "Unable to install salt, exiting"
 fi
 
-
 read -p "Path to nio project ($NIO_ROOT_PATH/project): " NIO_PROJECT_PATH </dev/tty
 NIO_PROJECT_PATH=${NIO_PROJECT_PATH:-$NIO_ROOT_PATH/project}
 
@@ -142,8 +141,7 @@ if [ "${BS_SKIP_SYSTEMD}" != "1" ]; then
 	SYSTEMD_SERVICE_NAME=${BS_SYSTEMD_SERVICE_NAME:-nio-provisioning}
 	SYSTEMD_SALT_EXEC=${BS_SYSTEMD_SALT_EXEC:-$(command -v salt-minion)}
 	SYSTEMD_SALT_CONF_DIR=${BS_SYSTEMD_SALT_CONF_DIR:-$NIO_ROOT_PATH/provisioning}
-	#SYSTEMD_FOLDER=/etc/systemd/system
-	SYSTEMD_FOLDER=.
+	SYSTEMD_FOLDER=/etc/systemd/system
 
 	SYSTEMD_SERVICE_NAME=$SYSTEMD_SERVICE_NAME SYSTEMD_SALT_EXEC=$SYSTEMD_SALT_EXEC SYSTEMD_SALT_CONF_DIR=$SYSTEMD_SALT_CONF_DIR envsubst < systemd.service > "$SYSTEMD_FOLDER/$SYSTEMD_SERVICE_NAME.service"
 
