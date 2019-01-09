@@ -76,7 +76,7 @@ fi
 echoinfo "Some of this script requires root/sudo access, you may be prompted for your password"
 sudo -v
 
-read -p "nio Device ID (required): " DEVICE_ID
+read -p "nio Device ID (required): " DEVICE_ID </dev/tty
 if [ -z "$DEVICE_ID" ]; then
 	echofatal "A device ID is required, get this from the nio device manager"
 fi
@@ -87,7 +87,7 @@ echodebug "Using temp dir for bootstrapping:" $BOOTSTRAP_DIR
 echoinfo "Downlaoding bootstrap repository"
 git clone -q git://github.com/niolabs/provisioning.git $BOOTSTRAP_DIR
 
-read -p "nio resource root folder (/opt/nio): " NIO_ROOT_PATH
+read -p "nio resource root folder (/opt/nio): " NIO_ROOT_PATH </dev/tty
 NIO_ROOT_PATH=${NIO_ROOT_PATH:-/opt/nio}
 
 if [ ! -d "$NIO_ROOT_PATH" ]; then
@@ -96,7 +96,7 @@ if [ ! -d "$NIO_ROOT_PATH" ]; then
 fi
 
 if [ -z "$VIRTUAL_ENV" ]; then
-	read -p "No active virtualenv detected, which virtual env to use or create? ($NIO_ROOT_PATH/env) " VIRTUAL_ENV
+	read -p "No active virtualenv detected, which virtual env to use or create? ($NIO_ROOT_PATH/env) " VIRTUAL_ENV </dev/tty
 	VIRTUAL_ENV=${VIRTUAL_ENV:-"$NIO_ROOT_PATH"/env}
 	if [ ! -x "$VIRTUAL_ENV/bin/activate" ]; then
 		echoinfo "No virtualenv detected at $VIRTUAL_ENV, creating one"
@@ -114,11 +114,11 @@ if [ ! -x "$(command -v salt-minion)" ]; then
 fi
 
 
-read -p "Path to nio project ($NIO_ROOT_PATH/project): " NIO_PROJECT_PATH
+read -p "Path to nio project ($NIO_ROOT_PATH/project): " NIO_PROJECT_PATH </dev/tty
 NIO_PROJECT_PATH=${NIO_PROJECT_PATH:-$NIO_ROOT_PATH/project}
 
 if [ ! -f "$NIO_PROJECT_PATH/nio.conf" ]; then
-	read -p "No nio project found at $NIO_PROJECT_PATH, would you like to create one? [Y,n]? " _CREATE_NIO_PROJ
+	read -p "No nio project found at $NIO_PROJECT_PATH, would you like to create one? [Y,n]? " _CREATE_NIO_PROJ </dev/tty
 	_CREATE_NIO_PROJ=${_CREATE_NIO_PROJ:-Y}
 	if [ "${_CREATE_NIO_PROJ}" == "y" ] || [ "${_CREATE_NIO_PROJ}" == "Y" ]; then
 		echoinfo "Creating nio project at $NIO_PROJECT_PATH"
