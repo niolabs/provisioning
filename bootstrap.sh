@@ -98,7 +98,7 @@ fi
 if [ -z "$VIRTUAL_ENV" ]; then
 	read -p "No active virtualenv detected, which virtual env to use or create? ($NIO_ROOT_PATH/env) " VIRTUAL_ENV </dev/tty
 	VIRTUAL_ENV=${VIRTUAL_ENV:-"$NIO_ROOT_PATH"/env}
-	if [ ! -x "$VIRTUAL_ENV/bin/activate" ]; then
+	if [ ! -f "$VIRTUAL_ENV/bin/activate" ]; then
 		echoinfo "No virtualenv detected at $VIRTUAL_ENV, creating one"
 		PYTHON_EXEC=${BS_PYTHON_EXEC:-$(command -v python3)}
 		echodebug "virtualenv -p \"$PYTHON_EXEC\" \"$VIRTUAL_ENV\""
