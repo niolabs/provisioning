@@ -1,0 +1,6 @@
+master: ${MINION_MASTER_HOST}
+id: ${MINION_DEVICE_ID}
+
+grains:
+  nio-project: ${NIO_PROJECT_DIR}
+  nio-virtualenv: ${NIO_VIRTUALENV_DIR}

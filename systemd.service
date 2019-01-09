@@ -1,0 +1,12 @@
+[Unit]
+Description=${SYSTEMD_SERVICE_NAME}
+After=network.target
+
+[Service]
+ExecStart=${SYSTEMD_SALT_EXEC} -c ${SYSTEMD_SALT_CONF_DIR}
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

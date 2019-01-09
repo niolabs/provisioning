@@ -1,0 +1,12 @@
+[Unit]
+Description=nio-provisioning
+After=network.target
+
+[Service]
+ExecStart=/Users/matt/.pyenv/shims/salt-minion -c /opt/nio/provisioning
+ExecReload=/bin/kill -HUP 
+KillMode=process
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
