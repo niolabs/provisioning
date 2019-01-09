@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e  # die on errors
 
 ## Available environment variables to control this script
 # BS_COLORS: Set to 0 to disable color output
