@@ -89,8 +89,7 @@ BOOTSTRAP_DIR=`mktemp -d`
 echodebug "Using temp dir for bootstrapping:" $BOOTSTRAP_DIR
 
 echodebug "Cloning bootstrap repository"
-# git clone git://github.com/niolabs/provisioning.git $BOOTSTRAP_DIR
-BOOTSTRAP_DIR=`pwd`
+git clone git://github.com/niolabs/provisioning.git $BOOTSTRAP_DIR
 
 read -p "nio resource root folder (/opt/nio): " NIO_ROOT_PATH
 NIO_ROOT_PATH=${NIO_ROOT_PATH:-/opt/nio}
@@ -108,7 +107,7 @@ if [ ! -f "$NIO_PROJECT_PATH/nio.conf" ]; then
 	_CREATE_NIO_PROJ=${_CREATE_NIO_PROJ:-Y}
 	if [ "${_CREATE_NIO_PROJ}" == "y" ] || [ "${_CREATE_NIO_PROJ}" == "Y" ]; then
 		echoinfo "Creating nio project at $NIO_PROJECT_PATH"
-		# git clone git://github.com/niolabs/project_template.git $NIO_PROJECT_PATH
+		git clone git://github.com/niolabs/project_template.git $NIO_PROJECT_PATH
 	fi
 fi
 
