@@ -14,5 +14,21 @@ curl -s -L https://raw.githubusercontent.com/niolabs/provisioning/master/bootstr
 ## Requirements
  - A shell capable of running `bash`
  - A device with `systemd` as its init script
- - A Python 3 virtual environment already created
+ - A Python 3 executable and a `virtualenv` executable
  - A valid device ID from nio
+
+## Bootstrapping a new device
+
+### Ubuntu/Debian
+```bash
+sudo apt install python3 python3-virtualenv
+curl -s -L https://raw.githubusercontent.com/niolabs/provisioning/master/bootstrap.sh | bash
+```
+
+### Mac OSX
+Mac does not run systemd, so we skip that part.
+```bash
+brew install python3
+pip3 install virtualenv
+curl -s -L https://raw.githubusercontent.com/niolabs/provisioning/master/bootstrap.sh | BS_SKIP_SYSTEMD=1 bash
+```

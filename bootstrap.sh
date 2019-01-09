@@ -11,6 +11,7 @@
 # BS_SYSTEMD_SALT_CONF_DIR: The path to the provisioning configuration directory (default /opt/nio/provisioning)
 # BS_SKIP_MINION: Set to 1 to skip minion configuration
 # BS_MINION_MASTER: The master host of the provisioning server
+# BS_PYTHON_EXEC: The path to the python3 executable for creating a virtualenv
 
 
 _COLORS=${BS_COLORS:-$(tput colors 2>/dev/null || echo 0)}
@@ -64,17 +65,12 @@ if [ ! -x "$(command -v git)" ]; then
 	echofatal "This script requires git. Make sure git is installed and run again."
 fi
 
+if [ ! -x "$(command -v virtualenv)" ]; then
+	echofatal "This script requires running nio in a virtual environment. Make sure virtualenv is installed and run again."
+fi
+
 if [ "${BS_SKIP_SYSTEMD}" != "1" ] && [ ! -x "$(command -v systemctl)" ]; then
 	echofatal "This script must be run on a systemd compatible device. Install systemd and try again."
-fi
-
-if [ -z "$VIRTUAL_ENV" ]; then
-	echofatal "This script requires being run from a Python 3 virtual environment. Please activate your virtual environment or set the VIRTUAL_ENV environment variable and run again"
-fi
-
-if [ ! -x "$(command -v salt-minion)" ]; then
-	echoinfo "Salt package not detected, installing now"
-	pip install salt || echofatal "Unable to install salt, exiting"
 fi
 
 echoinfo "Some of this script requires root/sudo access, you may be prompted for your password"
@@ -88,8 +84,8 @@ fi
 BOOTSTRAP_DIR=`mktemp -d`
 echodebug "Using temp dir for bootstrapping:" $BOOTSTRAP_DIR
 
-echodebug "Cloning bootstrap repository"
-git clone git://github.com/niolabs/provisioning.git $BOOTSTRAP_DIR
+echoinfo "Downlaoding bootstrap repository"
+git clone -q git://github.com/niolabs/provisioning.git $BOOTSTRAP_DIR
 
 read -p "nio resource root folder (/opt/nio): " NIO_ROOT_PATH
 NIO_ROOT_PATH=${NIO_ROOT_PATH:-/opt/nio}
@@ -99,6 +95,25 @@ if [ ! -d "$NIO_ROOT_PATH" ]; then
 	sudo chown $_USER:$_GROUP "$NIO_ROOT_PATH"
 fi
 
+if [ -z "$VIRTUAL_ENV" ]; then
+	read -p "No active virtualenv detected, which virtual env to use or create? ($NIO_ROOT_PATH/env) " VIRTUAL_ENV
+	VIRTUAL_ENV=${VIRTUAL_ENV:-"$NIO_ROOT_PATH"/env}
+	if [ ! -x "$VIRTUAL_ENV/bin/activate" ]; then
+		echoinfo "No virtualenv detected at $VIRTUAL_ENV, creating one"
+		PYTHON_EXEC=${BS_PYTHON_EXEC:-$(command -v python3)}
+		echodebug "virtualenv -p \"$PYTHON_EXEC\" \"$VIRTUAL_ENV\""
+		virtualenv -p "$PYTHON_EXEC" "$VIRTUAL_ENV"
+	fi
+	echoinfo "Activating virtualenv at $VIRTUAL_ENV"
+	source "$VIRTUAL_ENV/bin/activate"
+fi
+
+if [ ! -x "$(command -v salt-minion)" ]; then
+	echoinfo "Salt package not detected, installing now"
+	pip install salt || echofatal "Unable to install salt, exiting"
+fi
+
+
 read -p "Path to nio project ($NIO_ROOT_PATH/project): " NIO_PROJECT_PATH
 NIO_PROJECT_PATH=${NIO_PROJECT_PATH:-$NIO_ROOT_PATH/project}
 
@@ -107,7 +122,7 @@ if [ ! -f "$NIO_PROJECT_PATH/nio.conf" ]; then
 	_CREATE_NIO_PROJ=${_CREATE_NIO_PROJ:-Y}
 	if [ "${_CREATE_NIO_PROJ}" == "y" ] || [ "${_CREATE_NIO_PROJ}" == "Y" ]; then
 		echoinfo "Creating nio project at $NIO_PROJECT_PATH"
-		git clone git://github.com/niolabs/project_template.git $NIO_PROJECT_PATH
+		git clone -q git://github.com/niolabs/project_template.git $NIO_PROJECT_PATH
 	fi
 fi
 
