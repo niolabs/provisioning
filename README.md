@@ -17,7 +17,15 @@ curl -s -L https://raw.githubusercontent.com/niolabs/provisioning/master/bootstr
  - A Python 3 executable and a `virtualenv` executable
  - A valid device ID from nio
 
-## Bootstrapping a new device
+## Public/Private Key Pairs
+
+To complete the bootstrapping process you may need to add the public and private key of the device to the provisioning folder's key directory. This defaults to `/opt/nio/provisioning/pki` but in general it is `<ROOT_DIR>/provisioning/pki` if you use a custom "nio resource root folder" when bootstrapping.
+
+Put the device's public key and private key at these two files (the `minion.*` filenames are important and cannot be changed)
+ * /opt/nio/provisioning/pki/minion.pub - The device's public key
+ * /opt/nio/provisioning/pki/minion.pem - The device's private key
+
+## Operating System Instructions
 
 ### Ubuntu/Debian
 ```bash
