@@ -4,6 +4,7 @@ set -e  # die on errors
 ## Available environment variables to control this script
 # BS_COLORS: Set to 0 to disable color output
 # BS_DEBUG: Set to 1 to enable debug output
+# BS_LOCAL_RUN: Set to 1 to not clone the bootstrap repo but run from source
 # BS_USER: The user to create files as (defaults to current user)
 # BS_GROUP: The group to create files as (defaults to current user's primary group)
 # BS_SKIP_SYSTEMD: Set to 1 to skip systemd installation
@@ -82,11 +83,16 @@ if [ -z "$DEVICE_ID" ]; then
 	echofatal "A device ID is required, get this from the nio device manager"
 fi
 
-BOOTSTRAP_DIR=`mktemp -d`
-echodebug "Using temp dir for bootstrapping:" $BOOTSTRAP_DIR
+if [ ! "${BS_LOCAL_RUN}" == "1" ]; then
+	BOOTSTRAP_DIR=`mktemp -d`
+	echodebug "Using temp dir for bootstrapping:" $BOOTSTRAP_DIR
 
-echoinfo "Downlaoding bootstrap repository"
-git clone -q git://github.com/niolabs/provisioning.git $BOOTSTRAP_DIR
+	echoinfo "Downlaoding bootstrap repository"
+	git clone -q git://github.com/niolabs/provisioning.git $BOOTSTRAP_DIR
+else
+	BOOTSTRAP_DIR=$(dirname $0)
+	echodebug "Using local dir for bootstrapping:" $BOOTSTRAP_DIR
+fi
 
 read -p "nio resource root folder (/opt/nio): " NIO_ROOT_PATH </dev/tty
 NIO_ROOT_PATH=${NIO_ROOT_PATH:-/opt/nio}
@@ -134,6 +140,7 @@ if [ "${BS_SKIP_MINION}" != "1" ]; then
 		MINION_DEVICE_ID=$DEVICE_ID \
 		NIO_PROJECT_DIR=$NIO_PROJECT_PATH \
 		NIO_VIRTUALENV_DIR=$VIRTUAL_ENV \
+		MINION_CONF_DIR="$NIO_ROOT_PATH/provisioning" \
 		envsubst < "$BOOTSTRAP_DIR/minion_conf/minion" > "$NIO_ROOT_PATH/provisioning/minion"
 fi
 
