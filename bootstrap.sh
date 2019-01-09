@@ -144,11 +144,12 @@ if [ "${BS_SKIP_SYSTEMD}" != "1" ]; then
 	SYSTEMD_SALT_CONF_DIR=${BS_SYSTEMD_SALT_CONF_DIR:-$NIO_ROOT_PATH/provisioning}
 	SYSTEMD_FOLDER=/etc/systemd/system
 
-	SYSTEMD_SERVICE_NAME=$SYSTEMD_SERVICE_NAME SYSTEMD_SALT_EXEC=$SYSTEMD_SALT_EXEC SYSTEMD_SALT_CONF_DIR=$SYSTEMD_SALT_CONF_DIR envsubst < "$BOOTSTRAP_DIR/systemd.service" > "$SYSTEMD_FOLDER/$SYSTEMD_SERVICE_NAME.service"
+	SYSTEMD_SERVICE_NAME=$SYSTEMD_SERVICE_NAME SYSTEMD_SALT_EXEC=$SYSTEMD_SALT_EXEC SYSTEMD_SALT_CONF_DIR=$SYSTEMD_SALT_CONF_DIR envsubst < "$BOOTSTRAP_DIR/systemd.service" | sudo tee "$SYSTEMD_FOLDER/$SYSTEMD_SERVICE_NAME.service" > /dev/null
 
 	echoinfo "Reloading systemd daemon and enabling provisioning service"
 	sudo systemctl daemon-reload
 	sudo systemctl enable $SYSTEMD_SERVICE_NAME.service
+	sudo service $SYSTEMD_SERVICE_NAME start
 	echosuccess "Restart the provisioning service by running \"sudo service $SYSTEMD_SERVICE_NAME restart\""
 fi
 
