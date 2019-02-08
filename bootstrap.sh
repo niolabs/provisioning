@@ -117,7 +117,7 @@ fi
 
 if [ ! -x "$(command -v salt-minion)" ]; then
 	echoinfo "Salt package not detected, installing now"
-	pip install salt || echofatal "Unable to install salt, exiting"
+	pip install --no-binary salt salt || echofatal "Unable to install salt, exiting"
 fi
 
 read -p "Path to nio project ($NIO_ROOT_PATH/project): " NIO_PROJECT_PATH </dev/tty
