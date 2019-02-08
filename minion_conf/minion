@@ -3,6 +3,7 @@ id: ${MINION_DEVICE_ID}
 
 grains:
   nio-project: ${NIO_PROJECT_DIR}
+  nio-project-type: ${NIO_PROJECT_TYPE}
   nio-virtualenv: ${NIO_VIRTUALENV_DIR}
 
 pki_dir: ${MINION_CONF_DIR}/pki

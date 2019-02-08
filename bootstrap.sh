@@ -83,6 +83,8 @@ if [ -z "$DEVICE_ID" ]; then
 	echofatal "A device ID is required, get this from the nio device manager"
 fi
 
+read -p "nio Project Type (optional): " NIO_PROJECT_TYPE </dev/tty
+
 if [ ! "${BS_LOCAL_RUN}" == "1" ]; then
 	BOOTSTRAP_DIR=`mktemp -d`
 	echodebug "Using temp dir for bootstrapping:" $BOOTSTRAP_DIR
@@ -138,6 +140,7 @@ if [ "${BS_SKIP_MINION}" != "1" ]; then
 	cp -r "$BOOTSTRAP_DIR"/minion_conf/* "$NIO_ROOT_PATH/provisioning"
 	MINION_MASTER_HOST=${BS_MINION_MASTER:-provisioning.n.io} \
 		MINION_DEVICE_ID=$DEVICE_ID \
+		NIO_PROJECT_TYPE=$NIO_PROJECT_TYPE \
 		NIO_PROJECT_DIR=$NIO_PROJECT_PATH \
 		NIO_VIRTUALENV_DIR=$VIRTUAL_ENV \
 		MINION_CONF_DIR="$NIO_ROOT_PATH/provisioning" \
