@@ -15,7 +15,13 @@ curl -s -L https://raw.githubusercontent.com/niolabs/provisioning/master/bootstr
  - A shell capable of running `bash`
  - A device with `systemd` as its init script
  - A Python 3 executable and a `virtualenv` executable
+ - Git installed on your device
  - A valid device ID from nio
+ 
+One line requirements install for Debian/Ubuntu/Raspbian devices:
+```
+sudo apt install git python3-virtualenv
+```
 
 ## Public/Private Key Pairs
 
