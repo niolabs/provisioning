@@ -20,7 +20,7 @@ curl -s -L https://raw.githubusercontent.com/niolabs/provisioning/master/bootstr
  
 One line requirements install for Debian/Ubuntu/Raspbian devices:
 ```
-sudo apt install git python3-virtualenv
+sudo apt install git virtualenv
 ```
 
 ## Public/Private Key Pairs
