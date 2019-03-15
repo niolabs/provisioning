@@ -20,7 +20,7 @@ curl -s -L https://raw.githubusercontent.com/niolabs/provisioning/master/bootstr
  
 One line requirements install for Debian/Ubuntu/Raspbian devices:
 ```
-sudo apt install git virtualenv
+sudo apt install git python3 virtualenv
 ```
 
 ## Public/Private Key Pairs
@@ -35,7 +35,7 @@ Put the device's public key and private key at these two files (the `minion.*` f
 
 ### Ubuntu/Debian
 ```bash
-sudo apt install python3 python3-virtualenv
+sudo apt install git python3 virtualenv
 curl -s -L https://raw.githubusercontent.com/niolabs/provisioning/master/bootstrap.sh | bash
 ```
 
